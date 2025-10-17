@@ -2,10 +2,10 @@
 setlocal enabledelayedexpansion
 
 REM Change the directory here
-cd /d "C:\Users\black\Desktop\trance"
+cd /d "D:\music all\music 9 (also new)"
 
 REM Create output directory if it doesn't exist
-if not exist "output" mkdir "output"
+if not exist "C:\AUDIO_OUTPUT" mkdir "C:\AUDIO_OUTPUT"
 
 REM For all files in the directory - remove silence at the beginning and end of track if the threshold is > -50dB
 REM Normalize volume for all files
@@ -15,9 +15,6 @@ REM for %%f in (*.mp3) do ( REM this will only iterate through the files at the 
 for /r %%f in (*.mp3) do ( REM this will iterate through all directories at the given filepath
     echo Processing %%f
 
-    REM Define output filename inside the output directory
-    set "outfile=output\%%~nf.mp3"
-    
     REM ================================================================================
     REM OLD IMPLEMENTATION
     
@@ -43,8 +40,35 @@ for /r %%f in (*.mp3) do ( REM this will iterate through all directories at the 
     
     REM =================================================================================
     REM Run ffmpeg with silenceremove and loudnorm filters chained
+
+    REM Get the parent directory of the file
+    for %%a in ("%%~dpf") do set "parent_dir=%%~nxa"
+
+    REM Extract the immediate parent directory name
+    REM First, get the full directory path
+    set "full_dir=%%~dpf"
+
+    REM Remove trailing backslash
+    set "full_dir=!full_dir:~0,-1!"
+
+    REM Get the parent directory name
+    for %%b in ("!full_dir!") do set "parent_folder=%%~nxb"
+
+    REM Create output folder path including the parent directory name
+    set "output_folder=C:\AUDIO_OUTPUT\!parent_folder!"
+
+    REM Create the output directory if it doesn't exist
+    if not exist "!output_folder!" mkdir "!output_folder!"
+
+    REM Define output filename
+    set "outfile=!output_folder!\%%~nf.mp3"
+
+    echo Output file: !outfile!
     
-    ffmpeg -i "%%f" -af "silenceremove=stop_periods=-1:stop_threshold=-50dB:start_periods=1:start_threshold=-50dB, loudnorm=I=-16:TP=-1.5:LRA=11" "!outfile!"
+    REM ffmpeg -i "%%f" -af "silenceremove=stop_periods=-1:stop_threshold=-50dB:start_periods=1:start_threshold=-50dB, loudnorm=I=-16:TP=-1.5:LRA=11" "!outfile!"
+    
+    REM -y FOR ANSWERING YES TO ANY QUESTION FFMPEG WILL ASK
+    ffmpeg -y -i "%%f" -af silenceremove=stop_periods=-1:stop_threshold=-50dB:start_periods=1:start_threshold=-50dB "!outfile!"
 
 )
 
