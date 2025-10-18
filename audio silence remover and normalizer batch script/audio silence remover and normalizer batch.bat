@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 REM Change the directory here
-cd /d "D:\music all\music"
+cd /d "C:\Users\black\Desktop\New folder"
 
 REM Create output directory if it doesn't exist
 if not exist "C:\AUDIO_OUTPUT" mkdir "C:\AUDIO_OUTPUT"
@@ -65,11 +65,13 @@ for /r %%f in (*.mp3) do ( REM this will iterate through all directories at the 
 
     echo Output file: !outfile!
     
-    REM ffmpeg -i "%%f" -af "silenceremove=stop_periods=1:start_periods=1:start_threshold=-50dB:start_duration=0.5:stop_threshold=-50dB:stop_duration=0.5 , loudnorm=I=-16:TP=-1.5:LRA=11" "!outfile!"
+    REM ffmpeg -i "%%f" -af "silenceremove=stop_periods=1:start_periods=1:start_threshold=-50dB:start_duration=2:stop_threshold=-50dB:stop_duration=2 , loudnorm=I=-16:TP=-1.5:LRA=11" "!outfile!"
     
     REM -y FOR ANSWERING YES TO ANY QUESTION FFMPEG WILL ASK
-    ffmpeg -y -i "%%f" -af "silenceremove=stop_periods=1:start_periods=1:start_threshold=-50dB:start_duration=0.5:stop_threshold=-50dB:stop_duration=0.5, loudnorm=I=-16:TP=-1.5:LRA=11"  "!outfile!"
+    ffmpeg -y -i "%%f" -af "silenceremove=stop_periods=-1:start_periods=1:start_threshold=-50dB:start_duration=2:stop_threshold=-50dB:stop_duration=2, loudnorm=I=-16:TP=-1.5:LRA=11"  "!outfile!"
 
+    REM stop_periods - 1 the track end will not be set by a silent segment
+    REM start_duration=0.5 each silent segment will be trimmer to 1s
 )
 
 pause
