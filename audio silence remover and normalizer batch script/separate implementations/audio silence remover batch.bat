@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 REM Change the directory here
-cd /d "C:\Users\black\Desktop\trance"
+cd /d "C:\Users\black\Desktop\aa"
 
 REM Create output directory if it doesn't exist
 if not exist "output_trimmed_silence" mkdir "output_trimmed_silence"
@@ -14,7 +14,7 @@ for %%f in (*.mp3) do (
     REM Define output filename inside the output directory
     set "outfile=output_trimmed_silence\%%~nf.mp3"
 
-    ffmpeg -i "%%f" -af silenceremove=stop_periods=-1:stop_threshold=-50dB:start_periods=1:start_threshold=-50dB "!outfile!"
+    ffmpeg -i "%%f" -af silenceremove=stop_periods=1:start_periods=1:start_threshold=-50dB:start_duration=0.5:stop_threshold=-50dB:stop_duration=0.5 "!outfile!"
 
     REM start_periods=1 and start_threshold=-50dB tell FFmpeg to remove silence at the beginning of the track.
     REM stop_periods=-1 and stop_threshold=-50dB tell it to remove silence at the end of the track.
