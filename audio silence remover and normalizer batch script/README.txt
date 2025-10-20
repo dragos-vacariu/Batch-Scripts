@@ -1,3 +1,10 @@
+This script shall be used for removing silent segments from mp3 files. 
+
+IMPORTANT: It does not distinguish whether silence is detected, at the beggining, at the end, or in the middle of the track.
+If your track has silence naturally in the middle... it will be removed... hence affecting the rhythm of the beat.
+
+----------------------------------------------
+
 THE BATCH SCRIPT REQUIRES FFMPEG LIBRARY
 
 IT WAS TESTED WITH ffmpeg8.0-essentials_build
